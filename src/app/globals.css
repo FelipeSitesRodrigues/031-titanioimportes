@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+@theme {
+  /* Paleta Titânio: preto, vermelho, cromado/branco */
+  --color-bg: #0a0a0a;
+  --color-surface: #141414;
+  --color-surface-2: #1c1c1c;
+  --color-border: #262626;
+  --color-fg: #fafafa;
+  --color-muted: #9ca3af;
+  --color-brand: #e10600;
+  --color-brand-dark: #a80000;
+  --color-brand-glow: #ff2a20;
+  --color-chrome: #c9cdd2;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-archivo), var(--font-inter), sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-fg);
+}
+
+/* ── Wordmark cromado (assinatura da marca) ─────────────── */
+.text-chrome {
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #d0d4d9 42%,
+    #8a9096 56%,
+    #eef0f2 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-glow {
+  text-shadow: 0 0 28px rgba(225, 6, 0, 0.5);
+}
+
+/* ── Carrossel infinito de marcas ───────────────────────── */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-duration, 34s) linear infinite;
+}
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+@media (hover: hover) {
+  .marquee-pause:hover .marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+/* ── Rota de voo (órbita do avião do logo) ──────────────── */
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.flight-arc {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 2.4s ease forwards 0.3s;
+}
+
+/* ── Botão CTA com pulso suave ──────────────────────────── */
+@keyframes pulseCta {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(225, 6, 0, 0);
+  }
+}
+.pulse-cta {
+  animation: pulseCta 2.2s ease-in-out infinite;
+}
+
+/* ── Transição entre páginas (View Transitions) ─────────── */
+::view-transition-old(.page-exit) {
+  animation: 150ms ease-in both pageOut;
+}
+::view-transition-new(.page-enter) {
+  animation: 320ms ease-out 110ms both pageIn;
+}
+@keyframes pageOut {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .flight-arc,
+  .pulse-cta {
+    animation: none;
+  }
+  .flight-arc {
+    stroke-dashoffset: 0;
+  }
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
